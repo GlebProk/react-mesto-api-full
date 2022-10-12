@@ -11,7 +11,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { BrowserRouter, Route, Redirect, Switch, Link, useHistory } from 'react-router-dom';
+import { Route, Redirect, Switch, useHistory } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import InfoTooltip from './InfoTooltip';
@@ -43,6 +43,7 @@ function App() {
       .catch((err) => {
         console.log(`${err}`);
       })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleEditAvatarClick() {
@@ -172,6 +173,7 @@ function App() {
 
   React.useEffect(() => {
     handleTokenCheck()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function handleTokenCheck() {
