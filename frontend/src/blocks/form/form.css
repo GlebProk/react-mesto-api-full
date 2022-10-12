@@ -1,0 +1,10 @@
+.form {
+  position: relative;
+  max-width: 358px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,17 @@
+.form__span-link {
+    text-decoration: none;
+    transition: opacity 0.2s linear;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+
+    color: #FFFFFF;
+}
+
+.form__span-link:hover {
+    opacity: 0.7;
+}

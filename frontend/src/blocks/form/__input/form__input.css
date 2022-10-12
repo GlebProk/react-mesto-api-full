@@ -1,0 +1,37 @@
+.form__input {
+    width: 358px;
+    height: 14px;
+    margin: 0 auto 30px auto;
+    padding: 0 0 13px 0;
+    border: none;
+    border-bottom: 2px solid #CCCCCC;
+
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #CCCCCC;
+
+    background-color: #000000;
+
+
+}
+
+::-webkit-input-placeholder {
+    color: #CCCCCC;
+}
+
+::-moz-placeholder {
+    color: #CCCCCC;
+}
+
+/* Firefox 19+ */
+:-moz-placeholder {
+    color: #CCCCCC;
+}
+
+/* Firefox 18- */
+:-ms-input-placeholder {
+    color: #CCCCCC;
+}

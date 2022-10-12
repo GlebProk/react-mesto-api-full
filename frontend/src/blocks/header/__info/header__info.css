@@ -1,0 +1,5 @@
+.header__info {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
