@@ -35,23 +35,26 @@ function App() {
   const history = useHistory();
 
   React.useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCard()])
-      .then(([userInfo, initialCards]) => {
-        setCurrentUser(userInfo);
-        setCards(...cards, initialCards);
-      })
-      .catch((err) => {
-        console.log(`${err}`);
-      })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (loggedIn) {
+      Promise.all([
+        api.getUserInfo(),
+        api.getInitialCards()])
+        .then(([userInfo, cards]) => {
+          setCards(cards);
+          setCurrentUser(userInfo);
+        })
+        .catch((err) => {
+          console.log(`${err}`);
+        })
+    }
+  }, [loggedIn, history]);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
 
-  function handleUpdateAvatar(data) {
-    api.editAvatar(data)
+  function handleUpdateAvatar(avatar) {
+    api.editAvatar(avatar)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -65,8 +68,8 @@ function App() {
     setIsEditProfilePopupOpen(true);
   }
 
-  function handleUpdateUser(data) {
-    api.patchUserInfo(data)
+  function handleUpdateUser(name, about) {
+    api.patchUserInfo(name, about)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -80,8 +83,8 @@ function App() {
     setIsAddCardPopupOpen(true);
   }
 
-  function handleAddPlaceSubmit(data) {
-    api.postNewCard(data)
+  function handleAddPlaceSubmit(name, link) {
+    api.postNewCard(name, link)
       .then((NewCard) => {
         setCards([NewCard, ...cards]);
         closeAllPopups();
@@ -138,12 +141,29 @@ function App() {
     setSelectedCard({});
   }
 
-  function handleRegister(data) {
-    apiAuth.register(data)
+  function handleLogin(email, password) {
+    apiAuth.authorize(email, password)
       .then((res) => {
+        if (res) {
+          setloggedIn(true);
+          setIsAuthorization(true);
+          setEmail(email);
+          history.push('/');
+        }
+      })
+      .catch((err) => {
+        setIsAuthorization(false);
+        console.log(`Ошибка: ${err}`)
+      })
+  }
+
+  function handleRegister(email, password) {
+    apiAuth.register(email, password)
+      .then(() => {
         setloggedIn(true);
         setIsAuthorization(true);
-        setEmail(data.email);
+        setEmail(email);
+        handleLogin(email, password);
         history.push('/');
       })
       .catch((err) => {
@@ -155,51 +175,29 @@ function App() {
       })
   }
 
-  function handleLogin(data) {
-    apiAuth.authorize(data)
+  React.useEffect(() => {
+    apiAuth.getContent()
       .then((res) => {
-        if (res.token) {
-          setloggedIn(true);
-          setIsAuthorization(true);
-          setEmail(data.email);
-          history.push('/');
-        }
+        setloggedIn(true);
+        setEmail(res.email);
+        history.push("/");
       })
       .catch((err) => {
-        setIsAuthorization(false);
-        console.log(`Ошибка: ${err}`)
-      })
-  }
-
-  React.useEffect(() => {
-    handleTokenCheck()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  function handleTokenCheck() {
-    // если у пользователя есть токен в localStorage, 
-    // эта функция проверит, действующий он или нет
-    const token = localStorage.getItem('token');
-    if (token) {
-      apiAuth.checkToken(token)
-        .then((res) => {
-          if (res) {
-            setloggedIn(true);
-            setEmail(res.data.email);
-            history.push('/');
-          }
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`)
-        })
-    }
-  }
+        history.push("/signin");
+        console.log(err)
+      });
+  }, [history])
 
   function handleSignOut() {
-    localStorage.removeItem('token');
-    setloggedIn(false);
-    history.push('/signin');
+    apiAuth.logoff()
+      .then((res) => {
+        setloggedIn(false);
+        setEmail(null);
+        history.push('/signin');
+      })
+      .catch((err) => console.log(err));
   }
+
 
   return (
     <div className="page">

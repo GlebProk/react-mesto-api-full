@@ -10,7 +10,7 @@ function getResponseData(res) {
 }
 
 
-export function register(data) {
+export function register(email, password) {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         credentials: 'include',
@@ -18,8 +18,8 @@ export function register(data) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            password: data.password,
-            email: data.email
+            password: password,
+            email: email
         })
     })
         .then(res => {
@@ -29,7 +29,7 @@ export function register(data) {
 
 
 // отправляем запрос на роут аутентификации
-export function authorize(data) {
+export function authorize(email, password) {
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
         credentials: 'include',
@@ -37,8 +37,8 @@ export function authorize(data) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            password: data.password,
-            email: data.email
+            password: password,
+            email: email
         })
     })
         .then(res => {
@@ -54,8 +54,7 @@ export function authorize(data) {
         })
 };
 
-// отправляем запрос на роут аутентификации
-export function checkToken(token) {
+export function getContent() {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         credentials: 'include',
