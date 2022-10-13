@@ -15,7 +15,7 @@ class Api {
   // Метод получения информации о профиле пользователя
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
-      method: "GET",
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -26,7 +26,7 @@ class Api {
   // Метод получения карточек при открытии страницы
   getInitialCard() {
     return fetch(`${this._baseUrl}/cards`, {
-      method: "GET",
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -38,6 +38,7 @@ class Api {
   patchUserInfo(item) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: item.name,
@@ -53,6 +54,7 @@ class Api {
   postNewCard(item) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: item.name,
@@ -68,6 +70,7 @@ class Api {
   deleteCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -80,6 +83,7 @@ class Api {
   putLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'PUT',
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -91,6 +95,7 @@ class Api {
   deleteLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -102,6 +107,7 @@ class Api {
   editAvatar(data) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         avatar: data.avatar
@@ -115,9 +121,8 @@ class Api {
 
 // Создаем экземпляр класса Api
 const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-44',
+  baseUrl: 'https://api.mesto.prokofyev.nomoredomains.icu',
   headers: {
-    authorization: '5da3e556-d369-4c0e-9a2c-e2a83040763e',
     'Content-Type': 'application/json'
   }
 });

@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://api.mesto.prokofyev.nomoredomains.icu';
 
 function getResponseData(res) {
     if (res.ok) {
@@ -13,6 +13,7 @@ function getResponseData(res) {
 export function register(data) {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -31,6 +32,7 @@ export function register(data) {
 export function authorize(data) {
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -56,13 +58,25 @@ export function authorize(data) {
 export function checkToken(token) {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
+        credentials: 'include',
         headers: {
             'Content-Type': "application/json",
-            'Authorization': `Bearer ${token}`,
         }
     })
         .then(res => {
             return getResponseData(res);
         })
-        .then(data => data)
+};
+
+export function logoff() {
+    return fetch(`${BASE_URL}/logoff`, {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(res => {
+            return getResponseData(res);
+        })
 };
