@@ -14,6 +14,10 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(cors({
+  origin: [
+    'https://mesto.frontend.prokofyev.nomoredomains.icu',
+    'https://api.mesto.prokofyev.nomoredomains.icu',
+  ],
   credentials: true,
 }));
 
