@@ -15,7 +15,6 @@ class Api {
   // Метод получения информации о профиле пользователя
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
-      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -26,7 +25,6 @@ class Api {
   // Метод получения карточек при открытии страницы
   getInitialCard() {
     return fetch(`${this._baseUrl}/cards`, {
-      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -38,7 +36,6 @@ class Api {
   patchUserInfo(item) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
-      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: item.name,
@@ -54,7 +51,6 @@ class Api {
   postNewCard(item) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
-      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: item.name,
@@ -70,7 +66,6 @@ class Api {
   deleteCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
-      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -83,7 +78,6 @@ class Api {
   putLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'PUT',
-      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -95,7 +89,6 @@ class Api {
   deleteLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
-      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -107,7 +100,6 @@ class Api {
   editAvatar(data) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
-      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         avatar: data.avatar
