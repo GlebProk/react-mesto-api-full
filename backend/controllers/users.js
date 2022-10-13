@@ -9,7 +9,7 @@ const NotFoundError = require('../errors/NotFoundError');
 
 module.exports.findUser = (req, res, next) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => res.send(users))
     .catch(next);
 };
 
@@ -47,21 +47,6 @@ module.exports.createUser = (req, res, next) => {
         return;
       }
       next(err);
-    });
-};
-
-module.exports.login = (req, res, next) => {
-  const { email, password } = req.body;
-
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      // создадим токен
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-      // вернём токен
-      res.send({ token });
-    })
-    .catch(() => {
-      next(new AuthError('Неверно введены почта или пароль'));
     });
 };
 
@@ -125,4 +110,35 @@ module.exports.updateAvatarByIdUser = (req, res, next) => {
         next(new InputError('Переданы некорректные данные при обновлении профиля'));
       } else next(err);
     });
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      // создадим токен
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+        secure: true,
+        sameSite: false,
+      });
+      // вернём токен
+      res.send({ token });
+    })
+    .catch(() => {
+      next(new AuthError('Неверно введены почта или пароль'));
+    });
+};
+
+module.exports.logoff = (req, res) => {
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    sameSite: false,
+    secure: true,
+  });
+  res.status(200)
+    .send({ message: 'Вы вышли из аккаунта' });
 };

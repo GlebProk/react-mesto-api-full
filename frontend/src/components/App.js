@@ -176,17 +176,22 @@ function App() {
   }
 
   React.useEffect(() => {
+    handleTokenCheck()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function handleTokenCheck() {
     apiAuth.getContent()
       .then((res) => {
         setloggedIn(true);
-        setEmail(res.email);
+        setEmail(res.data.email);
         history.push("/");
       })
       .catch((err) => {
         history.push("/signin");
         console.log(err)
       });
-  }, [history])
+  }
 
   function handleSignOut() {
     apiAuth.logoff()

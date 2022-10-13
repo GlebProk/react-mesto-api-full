@@ -38,19 +38,11 @@ export function authorize(email, password) {
         },
         body: JSON.stringify({
             password: password,
-            email: email
+            email: email,
         })
     })
         .then(res => {
             return getResponseData(res);
-        })
-        .then((data) => {
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-                return data;
-            } else {
-                return;
-            }
         })
 };
 

@@ -104,13 +104,13 @@ class Api {
   };
 
   // Метод для редактирования аватарки пользователя
-  editAvatar(data) {
+  editAvatar(avatar) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
-        avatar: data.avatar
+        avatar: avatar,
       })
     })
       .then(res => {
