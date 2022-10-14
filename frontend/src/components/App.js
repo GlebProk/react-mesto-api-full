@@ -35,6 +35,19 @@ function App() {
   const history = useHistory();
 
   React.useEffect(() => {
+    apiAuth.getContent()
+      .then((res) => {
+        setloggedIn(true);
+        setEmail(res.email);
+        history.push("/");
+      })
+      .catch((err) => {
+        history.push("/signin");
+        console.log(err)
+      });
+  }, [history])
+
+  React.useEffect(() => {
     Promise.all([
       api.getUserInfo(),
       api.getInitialCard()])
@@ -172,20 +185,6 @@ function App() {
         setIsInfoTooltipPopupOpen(true);
       })
   }
-
-  React.useEffect(() => {
-    apiAuth.getContent()
-      .then((res) => {
-        setloggedIn(true);
-        setEmail(res.email);
-        history.push("/");
-      })
-      .catch((err) => {
-        history.push("/signin");
-        console.log(err)
-      });
-  }, [history])
-
 
   function handleSignOut() {
     apiAuth.logoff()

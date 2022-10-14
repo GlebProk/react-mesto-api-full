@@ -3,31 +3,36 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors, Joi, celebrate } = require('celebrate');
-const cors = require('cors');
 const { login, createUser, logoff } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const cors = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use(cors({
+mongoose.connect('mongodb://localhost:27017/mestodb', {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
+
+/*app.use(cors({
   origin: [
     'https://mesto.frontend.prokofyev.nomoredomains.icu',
     'https://api.mesto.prokofyev.nomoredomains.icu',
   ],
   credentials: true,
 }));
+*/
+
+app.use(cors);
 
 app.use(bodyParser.json()); // для собирания JSON-формата
 app.use(bodyParser.urlencoded({ extended: true })); // для приёма веб-страниц внутри POST-запроса
 app.use(cookieParser());
-
-mongoose.connect('mongodb://localhost:27017/mestodb', {
-  useNewUrlParser: true,
-});
 
 app.use(requestLogger); // подключаем логгер запросов
 

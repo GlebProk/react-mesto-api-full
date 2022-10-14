@@ -18,8 +18,8 @@ export function register(email, password) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+            email: email,
             password: password,
-            email: email
         })
     })
         .then(res => {
@@ -37,8 +37,8 @@ export function authorize(email, password) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            password: password,
             email: email,
+            password: password,
         })
     })
         .then(res => {
