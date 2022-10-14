@@ -122,6 +122,31 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       // создадим токен
       const token = jwt.sign(
+        { _id: user._id },
+        'some-secret-key',
+        { expiresIn: '7d' },
+      );
+      res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+        secure: true,
+        sameSite: false,
+      });
+      // вернём токен
+      res.send({ token });
+    })
+    .catch(() => {
+      next(new AuthError('Неверно введены почта или пароль'));
+    });
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      // создадим токен
+      const token = jwt.sign(
         {
           _id: user._id,
           email: user.email,
@@ -132,19 +157,10 @@ module.exports.login = (req, res, next) => {
         secretKey,
         { expiresIn: '7d' },
       );
-      /* res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-        secure: true,
-        sameSite: false,
-      });
-      */
       // вернём токен
       res.send({ token });
     })
-    .catch(() => {
-      next(new AuthError('Неверно введены почта или пароль'));
-    });
+    .catch(next);
 };
 
 module.exports.logoff = (req, res) => {

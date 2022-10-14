@@ -11,7 +11,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Route, Redirect, Switch, useHistory } from 'react-router-dom';
+import { Route, Redirect, Switch, useHistory, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import InfoTooltip from './InfoTooltip';
@@ -33,32 +33,91 @@ function App() {
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = React.useState(false);
   const [isAuthorization, setIsAuthorization] = React.useState(false);
   const history = useHistory();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
-    apiAuth.getContent()
-      .then((res) => {
-        setloggedIn(true);
-        setEmail(res.email);
-        history.push("/");
-      })
-      .catch((err) => {
-        history.push("/signin");
-        console.log(err)
-      });
-  }, [history])
-
-  React.useEffect(() => {
-    Promise.all([
-      api.getUserInfo(),
-      api.getInitialCard()])
-      .then(([userInfo, cards]) => {
-        setCards(cards);
+    Promise.all([api.getUserInfo(), api.getInitialCard()])
+      .then(([userInfo, initialCards]) => {
         setCurrentUser(userInfo);
+        setCards(...cards, initialCards);
       })
       .catch((err) => {
         console.log(`${err}`);
       })
-  }, [loggedIn, history]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (loggedIn === true) {
+      navigate('/');
+      Promise.all([api.getUserInfo(), api.getInitialCard()])
+        .then(([userInfo, initialCards]) => {
+          setCurrentUser(userInfo);
+          setCards(...cards, initialCards);
+        })
+        .catch((err) => {
+          console.log(`${err}`);
+        })
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedIn, navigate]);
+
+  React.useEffect(() => {
+    handleTokenCheck()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function handleRegister(email, password) {
+    apiAuth.register(email, password)
+      .then((res) => {
+        setloggedIn(true);
+        setIsAuthorization(true);
+        setEmail(email);
+        history.push('/');
+      })
+      .catch((err) => {
+        setIsAuthorization(false);
+        console.log(`Ошибка: ${err}`)
+      })
+      .finally(() => {
+        setIsInfoTooltipPopupOpen(true);
+      })
+  }
+
+  function handleLogin(email, password) {
+    apiAuth.authorize(email, password)
+      .then((res) => {
+        if (res.token) {
+          setloggedIn(true);
+          setIsAuthorization(true);
+          setEmail(email);
+          history.push('/');
+        }
+      })
+      .catch((err) => {
+        setIsAuthorization(false);
+        console.log(`Ошибка: ${err}`)
+      })
+  }
+
+  function handleTokenCheck() {
+    // если у пользователя есть токен в localStorage, 
+    // эта функция проверит, действующий он или нет
+    const token = localStorage.getItem('token');
+    if (token) {
+      apiAuth.checkToken(token)
+        .then((res) => {
+          if (res) {
+            setloggedIn(true);
+            setEmail(res.email);
+            history.push('/');
+          }
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`)
+        })
+    }
+  }
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -150,40 +209,6 @@ function App() {
     setIsImagePopupOpen(false);
     setIsInfoTooltipPopupOpen(false);
     setSelectedCard({});
-  }
-
-  function handleLogin(email, password) {
-    apiAuth.authorize(email, password)
-      .then((res) => {
-        if (res) {
-          setloggedIn(true);
-          setIsAuthorization(true);
-          setEmail(email);
-          history.push('/');
-        }
-      })
-      .catch((err) => {
-        setIsAuthorization(false);
-        console.log(`Ошибка: ${err}`)
-      })
-  }
-
-  function handleRegister(email, password) {
-    apiAuth.register(email, password)
-      .then(() => {
-        setloggedIn(true);
-        setIsAuthorization(true);
-        setEmail(email);
-        handleLogin(email, password);
-        history.push('/');
-      })
-      .catch((err) => {
-        setIsAuthorization(false);
-        console.log(`Ошибка: ${err}`)
-      })
-      .finally(() => {
-        setIsInfoTooltipPopupOpen(true);
-      })
   }
 
   function handleSignOut() {
