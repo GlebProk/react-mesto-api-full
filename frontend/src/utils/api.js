@@ -50,7 +50,7 @@ class Api {
       headers: this._getHeaders(),
       body: JSON.stringify({
         name: data.name,
-        about: data.info
+        about: data.about
       })
     })
       .then(res => {
@@ -86,7 +86,6 @@ class Api {
       })
   };
 
-
   // Метод постановки лайка на карточке
   putLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
@@ -101,15 +100,24 @@ class Api {
 
   // Метод удаления лайка на карточке
   deleteLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: 'DELETE',
+    return fetch(`${this._baseUrl}cards/${cardId}/likes`, {
+      method: "DELETE",
       credentials: 'include',
       headers: this._getHeaders(),
     })
       .then(res => {
         return this._getResponseData(res);
       })
-  };
+  }
+
+  changeLikeCardStatus(cardId, isLiked) {
+    if (isLiked) {
+      return this.deleteLike(cardId);
+    } else {
+      return this.deleteLike(cardId);
+    }
+  }
+
 
   // Метод для редактирования аватарки пользователя
   editAvatar(data) {
