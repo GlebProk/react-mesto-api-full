@@ -11,7 +11,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Route, Redirect, Switch, useHistory, useNavigate } from 'react-router-dom';
+import { Route, Redirect, Switch, useHistory } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import InfoTooltip from './InfoTooltip';
@@ -33,7 +33,6 @@ function App() {
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = React.useState(false);
   const [isAuthorization, setIsAuthorization] = React.useState(false);
   const history = useHistory();
-  const navigate = useNavigate();
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCard()])
@@ -49,7 +48,6 @@ function App() {
 
   React.useEffect(() => {
     if (loggedIn === true) {
-      navigate('/');
       Promise.all([api.getUserInfo(), api.getInitialCard()])
         .then(([userInfo, initialCards]) => {
           setCurrentUser(userInfo);
@@ -60,7 +58,7 @@ function App() {
         })
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedIn, navigate]);
+  }, [loggedIn]);
 
   React.useEffect(() => {
     handleTokenCheck()
