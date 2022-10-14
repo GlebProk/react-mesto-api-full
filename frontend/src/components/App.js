@@ -37,8 +37,8 @@ function App() {
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCard()])
       .then(([userInfo, initialCards]) => {
-        setCurrentUser(userInfo);
-        setCards(initialCards.reverse());
+        setCurrentUser(userInfo.data);
+        setCards(initialCards.data);
       })
       .catch((err) => {
         console.log(`${err}`);
@@ -212,14 +212,10 @@ function App() {
   }
 
   function handleSignOut() {
-    apiAuth.logoff()
-      .then((res) => {
-        localStorage.removeItem('jwt');
-        setloggedIn(false);
-        setEmail(null);
-        history.push('/signin');
-      })
-      .catch((err) => console.log(err));
+    localStorage.removeItem('jwt');
+    setloggedIn(false);
+    setEmail(null);
+    history.push('/signin');
   }
 
 
