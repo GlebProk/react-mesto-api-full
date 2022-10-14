@@ -5,20 +5,20 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
 
     const [name, setName] = React.useState('');
-    const [about, setAbout] = React.useState('');
+    const [vocation, setVocation] = React.useState('');
     const userInfo = React.useContext(CurrentUserContext);
 
     React.useEffect(() => {
         setName(userInfo.name);
-        setAbout(userInfo.about)
+        setVocation(userInfo.about)
     }, [userInfo, isOpen])
 
     function handleChangeName(e) {
         setName(e.target.value);
     }
 
-    function handleChangeAbout(e) {
-        setAbout(e.target.value);
+    function handleChangeVocation(e) {
+        setVocation(e.target.value);
     }
 
     function handleSubmit(evt) {
@@ -26,7 +26,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         evt.preventDefault();
 
         // Передаём значения управляемых компонентов во внешний обработчик
-        onUpdateUser(name, about);
+        onUpdateUser({
+            name: name,
+            about: vocation,
+        });
     }
 
     return (
@@ -53,8 +56,8 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
                 type="text"
                 id="vocation"
                 placeholder="О себе"
-                value={about || ""}
-                onChange={handleChangeAbout}
+                value={vocation || ""}
+                onChange={handleChangeVocation}
                 required
             />
             <span className="popup__item-error popup__item-error_profile-vocation vocation-error"></span>
