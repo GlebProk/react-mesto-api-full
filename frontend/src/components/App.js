@@ -38,7 +38,7 @@ function App() {
     Promise.all([api.getUserInfo(), api.getInitialCard()])
       .then(([userInfo, initialCards]) => {
         setCurrentUser(userInfo);
-        setCards(...cards, initialCards);
+        setCards(initialCards.reverse());
       })
       .catch((err) => {
         console.log(`${err}`);
@@ -51,7 +51,7 @@ function App() {
       Promise.all([api.getUserInfo(), api.getInitialCard()])
         .then(([userInfo, initialCards]) => {
           setCurrentUser(userInfo);
-          setCards(...cards, initialCards);
+          setCards(initialCards.reverse());
         })
         .catch((err) => {
           console.log(`${err}`);
@@ -214,6 +214,7 @@ function App() {
   function handleSignOut() {
     apiAuth.logoff()
       .then((res) => {
+        localStorage.removeItem('jwt');
         setloggedIn(false);
         setEmail(null);
         history.push('/signin');
