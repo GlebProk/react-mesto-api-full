@@ -4,7 +4,6 @@ const AuthError = require('../errors/AuthError');
 const { NODE_ENV, JWT_SECRET } = process.env;
 const secretKey = NODE_ENV === 'production' ? JWT_SECRET : 'secret-key';
 
-// eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
@@ -13,6 +12,7 @@ module.exports = (req, res, next) => {
   }
 
   const token = authorization.replace('Bearer ', '');
+  console.log(token);
   let payload;
 
   try {
