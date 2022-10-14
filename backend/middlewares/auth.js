@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new AuthError('Необходима авторизация');
+    throw new AuthError('Необходима авторизация 444');
   }
 
   const token = authorization.replace('Bearer ', '');
@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, secretKey);
   } catch (err) {
     // отправим ошибку, если не получилось
-    next(new AuthError('Необходима авторизация'));
+    next(new AuthError('Необходима авторизация 555'));
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
