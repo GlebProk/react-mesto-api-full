@@ -46,17 +46,19 @@ export function authorize(email, password) {
         })
 };
 
-export function getContent() {
+export function checkToken(token) {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         credentials: 'include',
         headers: {
             'Content-Type': "application/json",
+            'Authorization': `Bearer ${token}`,
         }
     })
         .then(res => {
             return getResponseData(res);
         })
+        .then(data => data)
 };
 
 export function logoff() {
