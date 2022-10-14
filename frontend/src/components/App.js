@@ -35,18 +35,16 @@ function App() {
   const history = useHistory();
 
   React.useEffect(() => {
-    if (loggedIn) {
-      Promise.all([
-        api.getUserInfo(),
-        api.getInitialCard()])
-        .then(([userInfo, cards]) => {
-          setCards(cards);
-          setCurrentUser(userInfo);
-        })
-        .catch((err) => {
-          console.log(`${err}`);
-        })
-    }
+    Promise.all([
+      api.getUserInfo(),
+      api.getInitialCard()])
+      .then(([userInfo, cards]) => {
+        setCards(cards);
+        setCurrentUser(userInfo);
+      })
+      .catch((err) => {
+        console.log(`${err}`);
+      })
   }, [loggedIn, history]);
 
   function handleEditAvatarClick() {
@@ -176,22 +174,18 @@ function App() {
   }
 
   React.useEffect(() => {
-    handleTokenCheck()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  function handleTokenCheck() {
     apiAuth.getContent()
       .then((res) => {
         setloggedIn(true);
-        setEmail(res.data.email);
+        setEmail(res.email);
         history.push("/");
       })
       .catch((err) => {
         history.push("/signin");
         console.log(err)
       });
-  }
+  }, [history])
+
 
   function handleSignOut() {
     apiAuth.logoff()
