@@ -43,12 +43,15 @@ class Api {
   }
 
   // Метод обновления информации о профиле пользователя
-  patchUserInfo(name, about) {
+  patchUserInfo(data) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       credentials: 'include',
       headers: this._getHeaders(),
-      body: JSON.stringify({ name, about })
+      body: JSON.stringify({
+        name: data.name,
+        about: data.about
+      })
     })
       .then(res => {
         return this._getResponseData(res);
@@ -56,12 +59,15 @@ class Api {
   }
 
   // Метод добавления созданной пользователем карточки
-  postNewCard(name, link) {
+  postNewCard(data) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       credentials: 'include',
       headers: this._getHeaders(),
-      body: JSON.stringify({ name, link })
+      body: JSON.stringify({
+        name: data.name,
+        link: data.link
+      })
     })
       .then(res => {
         return this._getResponseData(res);
@@ -106,12 +112,14 @@ class Api {
   };
 
   // Метод для редактирования аватарки пользователя
-  editAvatar(avatar) {
+  editAvatar(data) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       credentials: 'include',
       headers: this._getHeaders(),
-      body: JSON.stringify({ avatar })
+      body: JSON.stringify({
+        avatar: data.avatar
+      })
     })
       .then(res => {
         return this._getResponseData(res);

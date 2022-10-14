@@ -65,9 +65,28 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  function handleTokenCheck() {
+    // если у пользователя есть токен в localStorage, 
+    // эта функция проверит, действующий он или нет
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      apiAuth.checkToken(jwt)
+        .then((res) => {
+          if (res) {
+            setloggedIn(true);
+            setEmail(res.email);
+            history.push('/');
+          }
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`)
+        })
+    }
+  }
+
   function handleRegister(email, password) {
     apiAuth.register(email, password)
-      .then((res) => {
+      .then(() => {
         setloggedIn(true);
         setIsAuthorization(true);
         setEmail(email);
@@ -82,10 +101,13 @@ function App() {
       })
   }
 
+
   function handleLogin(email, password) {
     apiAuth.authorize(email, password)
       .then((res) => {
         if (res.token) {
+          localStorage.setItem('jwt', res.token);
+          handleTokenCheck();
           setloggedIn(true);
           setIsAuthorization(true);
           setEmail(email);
@@ -93,28 +115,8 @@ function App() {
         }
       })
       .catch((err) => {
-        setIsAuthorization(false);
         console.log(`Ошибка: ${err}`)
       })
-  }
-
-  function handleTokenCheck() {
-    // если у пользователя есть токен в localStorage, 
-    // эта функция проверит, действующий он или нет
-    const token = localStorage.getItem('token');
-    if (token) {
-      apiAuth.checkToken(token)
-        .then((res) => {
-          if (res) {
-            setloggedIn(true);
-            setEmail(res.email);
-            history.push('/');
-          }
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`)
-        })
-    }
   }
 
   function handleEditAvatarClick() {
@@ -136,10 +138,10 @@ function App() {
     setIsEditProfilePopupOpen(true);
   }
 
-  function handleUpdateUser(name, about) {
-    api.patchUserInfo(name, about)
-      .then((res) => {
-        setCurrentUser(res);
+  function handleUpdateUser(data) {
+    api.patchUserInfo(data)
+      .then((data) => {
+        setCurrentUser(data);
         closeAllPopups();
       })
       .catch((err) => {
@@ -151,8 +153,8 @@ function App() {
     setIsAddCardPopupOpen(true);
   }
 
-  function handleAddPlaceSubmit(name, link) {
-    api.postNewCard(name, link)
+  function handleAddPlaceSubmit(data) {
+    api.postNewCard(data)
       .then((NewCard) => {
         setCards([NewCard, ...cards]);
         closeAllPopups();
