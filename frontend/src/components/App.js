@@ -123,8 +123,8 @@ function App() {
     setIsEditAvatarPopupOpen(true);
   }
 
-  function handleUpdateAvatar(avatar) {
-    api.editAvatar(avatar)
+  function handleUpdateAvatar(data) {
+    api.editAvatar(data)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
