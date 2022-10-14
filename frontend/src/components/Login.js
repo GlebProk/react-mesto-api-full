@@ -16,10 +16,7 @@ function Login({ onLogin }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    onLogin({
-      password,
-      email
-    });
+    onLogin(email, password);
   }
 
   return (

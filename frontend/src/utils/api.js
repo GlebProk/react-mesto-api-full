@@ -15,7 +15,7 @@ class Api {
   // Метод получения информации о профиле пользователя
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
-      method: "GET",
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -26,7 +26,7 @@ class Api {
   // Метод получения карточек при открытии страницы
   getInitialCard() {
     return fetch(`${this._baseUrl}/cards`, {
-      method: "GET",
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -35,13 +35,14 @@ class Api {
   }
 
   // Метод обновления информации о профиле пользователя
-  patchUserInfo(item) {
+  patchUserInfo(name, about) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
-        name: item.name,
-        about: item.about
+        name: name,
+        about: about
       })
     })
       .then(res => {
@@ -50,13 +51,14 @@ class Api {
   }
 
   // Метод добавления созданной пользователем карточки
-  postNewCard(item) {
+  postNewCard(name, link) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
-        name: item.name,
-        link: item.link,
+        name: name,
+        link: link,
       })
     })
       .then(res => {
@@ -68,6 +70,7 @@ class Api {
   deleteCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -80,6 +83,7 @@ class Api {
   putLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'PUT',
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -91,6 +95,7 @@ class Api {
   deleteLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: this._headers,
     })
       .then(res => {
@@ -99,12 +104,13 @@ class Api {
   };
 
   // Метод для редактирования аватарки пользователя
-  editAvatar(data) {
+  editAvatar(avatar) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
-        avatar: data.avatar
+        avatar: avatar,
       })
     })
       .then(res => {

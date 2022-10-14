@@ -10,15 +10,16 @@ function getResponseData(res) {
 }
 
 
-export function register(data) {
+export function register(email, password) {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            password: data.password,
-            email: data.email
+            email: email,
+            password: password,
         })
     })
         .then(res => {
@@ -28,34 +29,27 @@ export function register(data) {
 
 
 // отправляем запрос на роут аутентификации
-export function authorize(data) {
+export function authorize(email, password) {
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            password: data.password,
-            email: data.email
+            email: email,
+            password: password,
         })
     })
         .then(res => {
             return getResponseData(res);
         })
-        .then((data) => {
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-                return data;
-            } else {
-                return;
-            }
-        })
 };
 
-// отправляем запрос на роут аутентификации
 export function checkToken(token) {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
+        credentials: 'include',
         headers: {
             'Content-Type': "application/json",
             'Authorization': `Bearer ${token}`,
@@ -65,4 +59,17 @@ export function checkToken(token) {
             return getResponseData(res);
         })
         .then(data => data)
+};
+
+export function logoff() {
+    return fetch(`${BASE_URL}/logoff`, {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(res => {
+            return getResponseData(res);
+        })
 };

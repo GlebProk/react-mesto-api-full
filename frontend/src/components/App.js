@@ -11,7 +11,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { BrowserRouter, Route, Redirect, Switch, Link, useHistory } from 'react-router-dom';
+import { Route, Redirect, Switch, useHistory } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import InfoTooltip from './InfoTooltip';
@@ -43,14 +43,86 @@ function App() {
       .catch((err) => {
         console.log(`${err}`);
       })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    if (loggedIn === true) {
+      Promise.all([api.getUserInfo(), api.getInitialCard()])
+        .then(([userInfo, initialCards]) => {
+          setCurrentUser(userInfo);
+          setCards(...cards, initialCards);
+        })
+        .catch((err) => {
+          console.log(`${err}`);
+        })
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loggedIn]);
+
+  React.useEffect(() => {
+    handleTokenCheck()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function handleRegister(email, password) {
+    apiAuth.register(email, password)
+      .then((res) => {
+        setloggedIn(true);
+        setIsAuthorization(true);
+        setEmail(email);
+        history.push('/');
+      })
+      .catch((err) => {
+        setIsAuthorization(false);
+        console.log(`Ошибка: ${err}`)
+      })
+      .finally(() => {
+        setIsInfoTooltipPopupOpen(true);
+      })
+  }
+
+  function handleLogin(email, password) {
+    apiAuth.authorize(email, password)
+      .then((res) => {
+        if (res.token) {
+          setloggedIn(true);
+          setIsAuthorization(true);
+          setEmail(email);
+          history.push('/');
+        }
+      })
+      .catch((err) => {
+        setIsAuthorization(false);
+        console.log(`Ошибка: ${err}`)
+      })
+  }
+
+  function handleTokenCheck() {
+    // если у пользователя есть токен в localStorage, 
+    // эта функция проверит, действующий он или нет
+    const token = localStorage.getItem('token');
+    if (token) {
+      apiAuth.checkToken(token)
+        .then((res) => {
+          if (res) {
+            setloggedIn(true);
+            setEmail(res.email);
+            history.push('/');
+          }
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`)
+        })
+    }
+  }
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
 
-  function handleUpdateAvatar(data) {
-    api.editAvatar(data)
+  function handleUpdateAvatar(avatar) {
+    api.editAvatar(avatar)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -64,8 +136,8 @@ function App() {
     setIsEditProfilePopupOpen(true);
   }
 
-  function handleUpdateUser(data) {
-    api.patchUserInfo(data)
+  function handleUpdateUser(name, about) {
+    api.patchUserInfo(name, about)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -79,8 +151,8 @@ function App() {
     setIsAddCardPopupOpen(true);
   }
 
-  function handleAddPlaceSubmit(data) {
-    api.postNewCard(data)
+  function handleAddPlaceSubmit(name, link) {
+    api.postNewCard(name, link)
       .then((NewCard) => {
         setCards([NewCard, ...cards]);
         closeAllPopups();
@@ -137,67 +209,16 @@ function App() {
     setSelectedCard({});
   }
 
-  function handleRegister(data) {
-    apiAuth.register(data)
-      .then((res) => {
-        setloggedIn(true);
-        setIsAuthorization(true);
-        setEmail(data.email);
-        history.push('/');
-      })
-      .catch((err) => {
-        setIsAuthorization(false);
-        console.log(`Ошибка: ${err}`)
-      })
-      .finally(() => {
-        setIsInfoTooltipPopupOpen(true);
-      })
-  }
-
-  function handleLogin(data) {
-    apiAuth.authorize(data)
-      .then((res) => {
-        if (res.token) {
-          setloggedIn(true);
-          setIsAuthorization(true);
-          setEmail(data.email);
-          history.push('/');
-        }
-      })
-      .catch((err) => {
-        setIsAuthorization(false);
-        console.log(`Ошибка: ${err}`)
-      })
-  }
-
-  React.useEffect(() => {
-    handleTokenCheck()
-  }, [])
-
-  function handleTokenCheck() {
-    // если у пользователя есть токен в localStorage, 
-    // эта функция проверит, действующий он или нет
-    const token = localStorage.getItem('token');
-    if (token) {
-      apiAuth.checkToken(token)
-        .then((res) => {
-          if (res) {
-            setloggedIn(true);
-            setEmail(res.data.email);
-            history.push('/');
-          }
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`)
-        })
-    }
-  }
-
   function handleSignOut() {
-    localStorage.removeItem('token');
-    setloggedIn(false);
-    history.push('/signin');
+    apiAuth.logoff()
+      .then((res) => {
+        setloggedIn(false);
+        setEmail(null);
+        history.push('/signin');
+      })
+      .catch((err) => console.log(err));
   }
+
 
   return (
     <div className="page">
