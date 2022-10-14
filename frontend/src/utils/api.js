@@ -12,11 +12,19 @@ class Api {
     return Promise.reject(`Ошибка: ${res}`);
   }
 
+  _getHeaders() {
+    const jwt = localStorage.getItem("jwt");
+    return {
+      "Authorization": `Bearer ${jwt}`,
+      ...this._headers
+    }
+  }
+
   // Метод получения информации о профиле пользователя
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       credentials: 'include',
-      headers: this._headers,
+      headers: this._getHeaders(),
     })
       .then(res => {
         return this._getResponseData(res);
@@ -27,7 +35,7 @@ class Api {
   getInitialCard() {
     return fetch(`${this._baseUrl}/cards`, {
       credentials: 'include',
-      headers: this._headers,
+      headers: this._getHeaders(),
     })
       .then(res => {
         return this._getResponseData(res);
@@ -39,11 +47,8 @@ class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       credentials: 'include',
-      headers: this._headers,
-      body: JSON.stringify({
-        name: name,
-        about: about
-      })
+      headers: this._getHeaders(),
+      body: JSON.stringify({ name, about })
     })
       .then(res => {
         return this._getResponseData(res);
@@ -55,11 +60,8 @@ class Api {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       credentials: 'include',
-      headers: this._headers,
-      body: JSON.stringify({
-        name: name,
-        link: link,
-      })
+      headers: this._getHeaders(),
+      body: JSON.stringify({ name, link })
     })
       .then(res => {
         return this._getResponseData(res);
@@ -71,7 +73,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       credentials: 'include',
-      headers: this._headers,
+      headers: this._getHeaders(),
     })
       .then(res => {
         return this._getResponseData(res);
@@ -84,7 +86,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'PUT',
       credentials: 'include',
-      headers: this._headers,
+      headers: this._getHeaders(),
     })
       .then(res => {
         return this._getResponseData(res);
@@ -96,7 +98,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
       credentials: 'include',
-      headers: this._headers,
+      headers: this._getHeaders(),
     })
       .then(res => {
         return this._getResponseData(res);
@@ -108,10 +110,8 @@ class Api {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       credentials: 'include',
-      headers: this._headers,
-      body: JSON.stringify({
-        avatar: avatar,
-      })
+      headers: this._getHeaders(),
+      body: JSON.stringify({ avatar })
     })
       .then(res => {
         return this._getResponseData(res);
