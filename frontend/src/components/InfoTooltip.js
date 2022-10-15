@@ -2,7 +2,7 @@ import React from 'react';
 import unionImgTrue from "../images/UnionTrue.png"
 import unionImgFalse from "../images/UnionFalse.png"
 
-function InfoTooltip({ isOpen, onClose, isAuthorization }) {
+function InfoTooltip({ isOpen, onClose, isRegistered }) {
     return (
         <div className={isOpen ? `popup popup_opened` : `popup`}>
             <div className="popup__container">
@@ -14,12 +14,12 @@ function InfoTooltip({ isOpen, onClose, isAuthorization }) {
                 />
                 <img
                     className="popup__union"
-                    src={isAuthorization ? unionImgTrue : unionImgFalse}
-                    alt={isAuthorization ? 'Картинка успеха' : 'Картинка ошибки'}
+                    src={isRegistered ? unionImgTrue : unionImgFalse}
+                    alt={isRegistered ? 'Картинка успеха' : 'Картинка ошибки'}
                 />
                 <h2
                     className="popup__info-text">
-                    {isAuthorization ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
+                    {isRegistered ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
                 </h2>
             </div>
         </div>
