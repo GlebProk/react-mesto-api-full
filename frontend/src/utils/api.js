@@ -101,7 +101,7 @@ class Api {
   // Метод удаления лайка на карточке
   deleteLike(cardId) {
     return fetch(`${this._baseUrl}cards/${cardId}/likes`, {
-      method: "DELETE",
+      method: 'DELETE',
       credentials: 'include',
       headers: this._getHeaders(),
     })
