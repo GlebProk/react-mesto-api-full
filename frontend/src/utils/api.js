@@ -88,9 +88,9 @@ class Api {
 
   changeLikeCardStatus(cardId, isLiked) {
     if (isLiked) {
-      return this.putLike(cardId);
-    } else {
       return this.deleteLike(cardId);
+    } else {
+      return this.putLike(cardId);
     }
   }
 
