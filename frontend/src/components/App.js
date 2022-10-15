@@ -32,6 +32,7 @@ function App() {
   const [email, setEmail] = React.useState('')
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = React.useState(false);
   const [isAuthorization, setIsAuthorization] = React.useState(false);
+  const [isRegistered, setIsRegistered] = React.useState(false);
   const history = useHistory();
 
   React.useEffect(() => {
@@ -84,25 +85,6 @@ function App() {
     }
   }
 
-  function handleRegister(email, password) {
-    apiAuth.register(email, password)
-      .then(() => {
-        setloggedIn(true);
-        setIsAuthorization(true);
-        setEmail(email);
-        handleLogin(email, password);
-        history.push('/');
-      })
-      .catch((err) => {
-        setIsAuthorization(false);
-        console.log(`Ошибка: ${err}`)
-      })
-      .finally(() => {
-        setIsInfoTooltipPopupOpen(true);
-      })
-  }
-
-
   function handleLogin(email, password) {
     apiAuth.authorize(email, password)
       .then((res) => {
@@ -117,6 +99,21 @@ function App() {
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`)
+      })
+  }
+
+  function handleRegister(email, password) {
+    apiAuth.register(email, password)
+      .then(() => {
+        setIsRegistered(true);
+        history.push('/signin');
+      })
+      .catch((err) => {
+        setIsRegistered(false);
+        console.log(`Ошибка: ${err}`)
+      })
+      .finally(() => {
+        setIsInfoTooltipPopupOpen(true);
       })
   }
 
@@ -263,7 +260,7 @@ function App() {
         <InfoTooltip
           onClose={closeAllPopups}
           isOpen={isInfoTooltipPopupOpen}
-          isAuthorization={isAuthorization}
+          isRegistered={isRegistered}
         />
       </CurrentUserContext.Provider>
     </div >
