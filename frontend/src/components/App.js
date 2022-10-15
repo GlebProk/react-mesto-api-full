@@ -87,6 +87,7 @@ function App() {
   function handleRegister(email, password) {
     apiAuth.register(email, password)
       .then(() => {
+        handleTokenCheck();
         setloggedIn(true);
         setIsAuthorization(true);
         setEmail(email);
