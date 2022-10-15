@@ -103,9 +103,8 @@ function App() {
   function handleRegister(email, password) {
     apiAuth.register(email, password)
       .then(() => {
-        handleTokenCheck();
         setIsRegistered(true);
-        history.push('/');
+        history.push('/signin');
       })
       .catch((err) => {
         setIsRegistered(false);
