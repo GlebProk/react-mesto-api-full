@@ -31,7 +31,6 @@ function App() {
   const [loggedIn, setloggedIn] = React.useState(false);
   const [email, setEmail] = React.useState('')
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = React.useState(false);
-  const [isAuthorization, setIsAuthorization] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
   const history = useHistory();
 
@@ -92,7 +91,6 @@ function App() {
           localStorage.setItem('jwt', res.token);
           handleTokenCheck();
           setloggedIn(true);
-          setIsAuthorization(true);
           setEmail(email);
           history.push('/');
         }
@@ -105,8 +103,8 @@ function App() {
   function handleRegister(email, password) {
     apiAuth.register(email, password)
       .then(() => {
+        handleTokenCheck();
         setIsRegistered(true);
-        history.push('/signin');
       })
       .catch((err) => {
         setIsRegistered(false);
