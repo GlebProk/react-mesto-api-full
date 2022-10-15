@@ -87,10 +87,10 @@ function App() {
   function handleRegister(email, password) {
     apiAuth.register(email, password)
       .then(() => {
-        handleTokenCheck();
         setloggedIn(true);
         setIsAuthorization(true);
         setEmail(email);
+        handleLogin(email, password);
         history.push('/');
       })
       .catch((err) => {
