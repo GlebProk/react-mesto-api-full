@@ -170,13 +170,15 @@ function App() {
   }
 
   function handleCardLike(card) {
+    console.log(card);
+    console.log(currentUser);
     // Проверяем, есть ли уже лайк на этой карточке
     const even = (like) => like === currentUser._id;
     const isLiked = card.likes.some(even);
 
     api.changeLikeCardStatus(card._id, isLiked)
       .then((newCard) => {
-        setCards((state) => state.map((c) => c === card._id ? newCard : c));
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
       })
       .catch((err) => {
         console.log(`${err}`);
