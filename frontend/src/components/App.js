@@ -105,6 +105,7 @@ function App() {
       .then(() => {
         handleTokenCheck();
         setIsRegistered(true);
+        history.push('/');
       })
       .catch((err) => {
         setIsRegistered(false);
