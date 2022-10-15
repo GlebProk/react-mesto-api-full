@@ -86,6 +86,14 @@ class Api {
       })
   };
 
+  changeLikeCardStatus(cardId, isLiked) {
+    if (isLiked) {
+      return this.putLike(cardId);
+    } else {
+      return this.deleteLike(cardId);
+    }
+  }
+
   // Метод постановки лайка на карточке
   putLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
@@ -109,15 +117,6 @@ class Api {
         return this._getResponseData(res);
       })
   }
-
-  changeLikeCardStatus(cardId, isLiked) {
-    if (isLiked) {
-      return this.deleteLike(cardId);
-    } else {
-      return this.deleteLike(cardId);
-    }
-  }
-
 
   // Метод для редактирования аватарки пользователя
   editAvatar(data) {

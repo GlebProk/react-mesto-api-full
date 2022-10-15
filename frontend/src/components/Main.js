@@ -5,7 +5,6 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 function Main({ cards, onEditAvatar, onEditProfile, onAddCard, onCardClick, onCardLike, onCardDelete }) {
 
   const userInfo = React.useContext(CurrentUserContext);
-  console.log(userInfo.name);
 
   return (
     <main>
