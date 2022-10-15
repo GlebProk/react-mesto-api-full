@@ -126,7 +126,8 @@ function App() {
   function handleUpdateAvatar(data) {
     api.editAvatar(data)
       .then((res) => {
-        setCurrentUser(res.data);
+        console.log(res);
+        setCurrentUser(res);
         closeAllPopups();
       })
       .catch((err) => {
@@ -140,8 +141,9 @@ function App() {
 
   function handleUpdateUser(data) {
     api.patchUserInfo(data)
-      .then((data) => {
-        setCurrentUser(data.data);
+      .then((res) => {
+        console.log(res);
+        setCurrentUser(res);
         closeAllPopups();
       })
       .catch((err) => {
