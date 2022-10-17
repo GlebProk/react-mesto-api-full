@@ -29,7 +29,7 @@ function App() {
 
 
   const [loggedIn, setloggedIn] = React.useState(false);
-  const [email, setEmail] = React.useState('')
+  const [email, setEmail] = React.useState('');
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
   const history = useHistory();
@@ -74,6 +74,7 @@ function App() {
         .then((res) => {
           if (res) {
             setloggedIn(true);
+            console.log(res.email);
             setEmail(res.email);
             history.push('/');
           }
@@ -201,7 +202,7 @@ function App() {
   function handleSignOut() {
     localStorage.removeItem('jwt');
     setloggedIn(false);
-    setEmail(null);
+    setEmail('');
     history.push('/signin');
   }
 
