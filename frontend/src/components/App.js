@@ -74,7 +74,6 @@ function App() {
         .then((res) => {
           if (res) {
             setloggedIn(true);
-            console.log(res.email);
             setEmail(res.email);
             history.push('/');
           }
@@ -202,7 +201,7 @@ function App() {
   function handleSignOut() {
     localStorage.removeItem('jwt');
     setloggedIn(false);
-    setEmail('');
+    setEmail(null);
     history.push('/signin');
   }
 
