@@ -201,7 +201,6 @@ function App() {
   function handleSignOut() {
     localStorage.removeItem('jwt');
     setloggedIn(false);
-    setEmail(null);
     history.push('/signin');
   }
 
