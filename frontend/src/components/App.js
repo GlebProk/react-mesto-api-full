@@ -75,6 +75,7 @@ function App() {
           if (res) {
             setloggedIn(true);
             setEmail(res.email);
+            console.log(email);
             history.push('/');
           }
         })
@@ -92,6 +93,7 @@ function App() {
           handleTokenCheck();
           setloggedIn(true);
           setEmail(email);
+          console.log(email);
           history.push('/');
         }
       })
