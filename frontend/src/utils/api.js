@@ -9,7 +9,7 @@ class Api {
       return res.json()
     }
     // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res.statusCode}`);
+    return Promise.reject(`Ошибка: ${res.status}`);
   }
 
   _getHeaders() {
