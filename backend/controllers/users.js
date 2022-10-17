@@ -90,6 +90,7 @@ module.exports.updateInfoByIdUser = (req, res, next) => {
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
+      console.log(err);
       if (err.statusCode === 404) {
         next(new NotFoundError('Пользователь c указанным _id не найден'));
       } else if (err.name === 'ValidationError' || err.name === 'CastError') {

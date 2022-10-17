@@ -92,7 +92,6 @@ function App() {
           handleTokenCheck();
           setloggedIn(true);
           setEmail(email);
-          console.log(email);
           history.push('/');
         }
       })
