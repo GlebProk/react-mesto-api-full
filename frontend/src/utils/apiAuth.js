@@ -1,12 +1,13 @@
 export const BASE_URL = 'https://api.mesto.prokofyev.nomoredomains.icu';
 
 function getResponseData(res) {
+    console.log(res);
     if (res.ok) {
         return res.json()
 
     }
     // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res}`);
+    return Promise.reject(`Ошибка: ${res.status}`);
 }
 
 
