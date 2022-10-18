@@ -8,7 +8,6 @@ const InputError = require('../errors/InputError');
 const NotFoundError = require('../errors/NotFoundError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
-const secretKey = NODE_ENV === 'production' ? JWT_SECRET : 'secret-key';
 
 module.exports.findUser = (req, res, next) => {
   User.find({})
@@ -123,15 +122,9 @@ module.exports.login = (req, res, next) => {
       // создадим токен
       const token = jwt.sign(
         { _id: user._id },
-        secretKey,
+        NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
         { expiresIn: '7d' },
       );
-      /* res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-        secure: true,
-        sameSite: false,
-      }); */
       // вернём токен
       res.send({ token });
     })
