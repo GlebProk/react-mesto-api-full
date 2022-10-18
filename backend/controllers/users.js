@@ -123,15 +123,15 @@ module.exports.login = (req, res, next) => {
       // создадим токен
       const token = jwt.sign(
         { _id: user._id },
-        'some-secret-key',
+        secretKey,
         { expiresIn: '7d' },
       );
-      res.cookie('jwt', token, {
+      /* res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         secure: true,
         sameSite: false,
-      });
+      }); */
       // вернём токен
       res.send({ token });
     })
