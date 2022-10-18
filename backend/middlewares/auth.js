@@ -1,4 +1,7 @@
+// eslint-disable-next-line import/no-unresolved
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
+
 const AuthError = require('../errors/AuthError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
