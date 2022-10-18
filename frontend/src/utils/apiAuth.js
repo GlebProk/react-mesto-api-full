@@ -1,7 +1,6 @@
 export const BASE_URL = 'https://api.mesto.prokofyev.nomoredomains.icu';
 
 function getResponseData(res) {
-    console.log(res);
     if (res.ok) {
         return res.json()
 

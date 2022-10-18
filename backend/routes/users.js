@@ -1,5 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
-require('dotenv').config();
 const router = require('express').Router();
 const { Joi, celebrate } = require('celebrate');
 const {
