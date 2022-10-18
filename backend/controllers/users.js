@@ -133,29 +133,6 @@ module.exports.login = (req, res, next) => {
     });
 };
 
-module.exports.login = (req, res, next) => {
-  const { email, password } = req.body;
-
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      // создадим токен
-      const token = jwt.sign(
-        {
-          _id: user._id,
-          email: user.email,
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-        },
-        secretKey,
-        { expiresIn: '7d' },
-      );
-      // вернём токен
-      res.send({ token });
-    })
-    .catch(next);
-};
-
 module.exports.logoff = (req, res) => {
   res.clearCookie('jwt', {
     httpOnly: true,
